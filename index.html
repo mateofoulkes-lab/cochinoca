@@ -1,0 +1,1018 @@
+<html lang="es-AR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La gaceta de Cochinoca</title>
+  <meta name="description" content="Diario ficticio de Cochinoca, Jujuy">
+  <style>
+    :root{
+      --bg:#f6f2e8;
+      --paper:#fffaf0;
+      --ink:#1a1a1a;
+      --muted:#5b5b5b;
+      --rule:#d9d2c3;
+      --accent:#7b1fa2;
+      --accent2:#0f5c6e;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(123,31,162,.08), transparent 60%),
+                  radial-gradient(900px 520px at 80% 10%, rgba(15,92,110,.10), transparent 55%),
+                  var(--bg);
+      color:var(--ink);
+      font-family:var(--sans);
+      line-height:1.45;
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .paper{
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86));
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+    }
+    header{
+      padding:22px 22px 10px;
+      background:
+        linear-gradient(180deg, rgba(123,31,162,.10), transparent 55%),
+        linear-gradient(90deg, rgba(0,0,0,.06), transparent 30%, transparent 70%, rgba(0,0,0,.06));
+      border-bottom:1px solid var(--rule);
+    }
+    .mast{
+      display:flex;
+      gap:18px;
+      align-items:flex-end;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:260px;
+    }
+    .kicker{
+      font-family:var(--mono);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .title{
+      font-family:var(--serif);
+      font-weight:800;
+      letter-spacing:.02em;
+      font-size:44px;
+      line-height:1.05;
+      margin:0;
+    }
+    .meta{
+      text-align:right;
+      min-width:240px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      align-items:flex-end;
+    }
+    .meta .date{
+      font-family:var(--mono);
+      font-size:13px;
+      color:var(--muted);
+    }
+    .meta .loc{
+      font-family:var(--serif);
+      font-size:15px;
+    }
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:14px 22px 18px;
+      border-top:1px solid rgba(0,0,0,.05);
+    }
+    .chip{
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(255,255,255,.7);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:13px;
+      cursor:pointer;
+      transition:transform .06s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .chip:hover{transform:translateY(-1px)}
+    .chip[aria-pressed="true"]{
+      border-color:rgba(123,31,162,.45);
+      background:rgba(123,31,162,.10);
+    }
+    .dot{
+      width:9px;height:9px;border-radius:99px;display:inline-block;background:var(--rule)
+    }
+    .dot.Policiales{background:#b71c1c}
+    .dot.moda{background:#2e7d32}
+    .dot.eventos{background:#1565c0}
+    .dot.cultura{background:#6a1b9a}
+    .dot.reclamos{background:#ef6c00}
+    .dot.avisos{background:#455a64}
+
+    main{padding:22px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .meta{text-align:left; align-items:flex-start}
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:14px;
+    }
+    @media (max-width: 720px){
+      .cards{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:var(--paper);
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow: 0 8px 22px rgba(0,0,0,.05);
+      display:flex;
+      flex-direction:column;
+      min-height: 280px;
+      cursor:pointer;
+      transition: transform .10s ease, box-shadow .20s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,.08);
+    }
+    .thumb{
+      height:140px;
+      background:#f2efe7;
+      border-bottom:1px solid rgba(0,0,0,.07);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .card-body{padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px}
+    .tagrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .tag{
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--muted);
+      border:1px solid rgba(0,0,0,.10);
+      padding:3px 8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.55);
+    }
+    .headline{
+      font-family:var(--serif);
+      font-weight:800;
+      font-size:20px;
+      margin:0;
+      line-height:1.15;
+    }
+    .excerpt{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .readmore{
+      margin-top:auto;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: rgba(123,31,162,.92);
+      font-weight:700;
+      font-size:13px;
+    }
+    .side{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .panel{
+      background:rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.04);
+    }
+    .panel h3{
+      font-family:var(--serif);
+      margin:0 0 10px;
+      font-size:18px;
+    }
+    .panel p{margin:0;color:var(--muted);font-size:14px}
+    .ticker{
+      margin-top:10px;
+      border-top:1px dashed rgba(0,0,0,.18);
+      padding-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .tick{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .tick .mini{
+      width:38px;height:38px;border-radius:12px;
+      border:1px solid rgba(0,0,0,.10);
+      background: linear-gradient(180deg, rgba(123,31,162,.14), rgba(15,92,110,.10));
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--mono); font-weight:800;
+    }
+    .tick .t{
+      font-size:13px;
+      color:var(--muted);
+      margin:0;
+    }
+    .tick strong{color:var(--ink)}
+    footer{
+      padding:18px 22px;
+      border-top:1px solid var(--rule);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+      background:rgba(0,0,0,.02);
+    }
+
+    /* Article view */
+    .article{
+      max-width: 860px;
+      margin:0 auto;
+      padding: 6px 0 10px;
+    }
+    .back{
+      display:inline-flex; align-items:center; gap:10px;
+      font-family:var(--mono);
+      font-size:13px;
+      border:1px solid rgba(0,0,0,.14);
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+      cursor:pointer;
+      text-decoration:none;
+      margin: 10px 0 16px;
+    }
+    .hero{
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:18px;
+      overflow:hidden;
+      background:var(--paper);
+      box-shadow: 0 12px 26px rgba(0,0,0,.06);
+    }
+    .hero .img{height:220px}
+    .hero .img img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero .inner{padding:18px}
+    .article h1{
+      font-family:var(--serif);
+      margin:10px 0 6px;
+      font-size:36px;
+      line-height:1.08;
+    }
+    .byline{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+      color:var(--muted); font-size:13px; font-family:var(--mono);
+      margin-bottom: 14px;
+    }
+    .content{
+      font-size:17px;
+      line-height:1.65;
+      color:#222;
+    }
+    .content p{margin: 0 0 14px}
+    .content .pull{
+      border-left:4px solid rgba(123,31,162,.45);
+      padding:10px 12px;
+      background: rgba(123,31,162,.06);
+      border-radius: 12px;
+      margin: 14px 0 18px;
+      color:#1f1f1f;
+    }
+    .content .note{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      border:1px dashed rgba(0,0,0,.18);
+      padding:10px 12px;
+      border-radius:12px;
+      background: rgba(255,255,255,.55);
+      margin-top: 16px;
+    }
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 760px){
+      .two-col{grid-template-columns:1fr}
+      .title{font-size:38px}
+      .article h1{font-size:32px}
+    }
+    .classifieds{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 6px;
+    }
+    .ad{
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:14px;
+      background: rgba(255,255,255,.70);
+      padding:12px;
+    }
+    .ad .h{
+      font-family:var(--mono);
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:#333;
+      margin-bottom:6px;
+    }
+    .ad p{margin:0;color:var(--muted);font-size:14px}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="paper" role="application" aria-label="La gaceta de Cochinoca">
+      <header>
+        <div class="mast">
+          <div class="brand">
+            <div class="kicker">Edición local • noticias, cultura y avisos</div>
+            <h1 class="title">La gaceta de Cochinoca</h1>
+          </div>
+          <div class="meta">
+            <div class="date" id="today">martes, 23 de diciembre de 2025</div>
+            <div class="loc">Cochinoca, Jujuy</div>
+          </div>
+        </div>
+        <nav aria-label="Filtrar por categorías" id="filters"><button class="chip" type="button" aria-pressed="true"><span class="dot all"></span>Todo</button><button class="chip" type="button" aria-pressed="false"><span class="dot Policiales"></span>Policiales</button><button class="chip" type="button" aria-pressed="false"><span class="dot moda"></span>Moda</button><button class="chip" type="button" aria-pressed="false"><span class="dot eventos"></span>Eventos</button><button class="chip" type="button" aria-pressed="false"><span class="dot cultura"></span>Cultura</button><button class="chip" type="button" aria-pressed="false"><span class="dot reclamos"></span>Reclamos</button><button class="chip" type="button" aria-pressed="false"><span class="dot avisos"></span>Avisos</button></nav>
+      </header>
+
+      <main id="app">
+        <div class="grid" aria-label="Portada">
+          <section>
+            <div class="panel" style="margin-bottom:14px">
+              <h3 style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                <span>Portada</span>
+                <span class="kicker" style="margin:0">Titulares del día</span>
+              </h3>
+              <p>Una edición bien de Cochinoca: un poco de misterio, un poco de chisme y bastante sol.</p>
+              <div class="ticker">
+                
+                  <div class="tick">
+                    <div class="mini">01</div>
+                    <p class="t"><strong>Policiales:</strong> Borraron un mural histórico y dejaron grafitis de frutas: firma “soquetin”</p>
+                  </div>
+                
+                  <div class="tick">
+                    <div class="mini">02</div>
+                    <p class="t"><strong>Moda:</strong> Ana Sakayama presenta su “all black” con detalles: ‘modo aliade activado’</p>
+                  </div>
+                
+                  <div class="tick">
+                    <div class="mini">03</div>
+                    <p class="t"><strong>Eventos:</strong> Pasó el aniversario del pueblo: devoción, kermese y relatos del patrono</p>
+                  </div>
+                
+                  <div class="tick">
+                    <div class="mini">04</div>
+                    <p class="t"><strong>Cultura:</strong> Sale un nuevo libro de homenajes a “la Bella y Pura”: guiños a una canción famosa</p>
+                  </div>
+                
+                  <div class="tick">
+                    <div class="mini">05</div>
+                    <p class="t"><strong>Reclamos:</strong> Carta firmada por S. Gutiérrez: denuncia un desagüe y acusa a su vecino de ‘hacerse el importante’</p>
+                  </div>
+                
+                  <div class="tick">
+                    <div class="mini">06</div>
+                    <p class="t"><strong>Avisos:</strong> Avisos y clasificados: ventas, trueques y un mensaje que huele a acertijo</p>
+                  </div>
+                
+              </div>
+            </div>
+
+            <div class="cards" id="cards"><article class="card" tabindex="0" role="link" aria-label="Abrir nota: Borraron un mural histórico y dejaron grafitis de frutas: firma “soquetin”">
+          <div class="thumb">
+            <img alt="Miniatura de Policiales" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22700%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20x2%3D%221%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23f8f2e8%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23efe6d7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%221200%22%20height%3D%22700%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%2290%22%20y%3D%2290%22%20width%3D%221020%22%20height%3D%22520%22%20rx%3D%2228%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.72%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%226%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22140%22%20y%3D%22150%22%20width%3D%22920%22%20height%3D%2270%22%20rx%3D%2218%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22140%22%20y%3D%22250%22%20width%3D%22920%22%20height%3D%2248%22%20rx%3D%2214%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22140%22%20y%3D%22320%22%20width%3D%22760%22%20height%3D%2248%22%20rx%3D%2214%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M240%20500%20C%20330%20430%2C%20430%20430%2C%20520%20500%22%20fill%3D%22none%22%20stroke%3D%22%23b71c1c%22%20stroke-width%3D%2216%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M520%20500%20C%20610%20430%2C%20710%20430%2C%20800%20500%22%20fill%3D%22none%22%20stroke%3D%22%232e7d32%22%20stroke-width%3D%2216%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M300%20560%20C%20390%20490%2C%20470%20490%2C%20560%20560%22%20fill%3D%22none%22%20stroke%3D%22%231565c0%22%20stroke-width%3D%2216%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22930%22%20y%3D%22585%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2246%22%20fill%3D%22%235b5b5b%22%3Esoquetin%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">Policiales</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">Redacción local</span>
+            </div>
+            <h2 class="headline">Borraron un mural histórico y dejaron grafitis de frutas: firma “soquetin”</h2>
+            <p class="excerpt">Vecinos amanecieron con la pared “lavada” de blanco. Donde antes había un mural querido, ahora: verduras, frutas y una firma.</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        </article><article class="card" tabindex="0" role="link" aria-label="Abrir nota: Ana Sakayama presenta su “all black” con detalles: ‘modo aliade activado’">
+          <div class="thumb">
+            <img alt="Miniatura de Moda" src="ana.png">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">Moda</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">Sección Moda</span>
+            </div>
+            <h2 class="headline">Ana Sakayama presenta su “all black” con detalles: ‘modo aliade activado’</h2>
+            <p class="excerpt">Entre sol norteño y estética otaku, Ana cuenta su conjunto favorito: negro total, guiños kawaii y un saludo especial para Alan.</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        </article><article class="card" tabindex="0" role="link" aria-label="Abrir nota: Pasó el aniversario del pueblo: devoción, kermese y relatos del patrono">
+          <div class="thumb">
+            <img alt="Miniatura de Eventos" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22700%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%221200%22%20height%3D%22700%22%20fill%3D%22%23f6f2e8%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M0%20520%20C%20250%20440%2C%20430%20460%2C%20650%20520%20C%20860%20578%2C%201000%20570%2C%201200%20520%20L1200%20700%20L0%20700%20Z%22%20fill%3D%22%23e8ddc6%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22140%22%20y%3D%22120%22%20width%3D%22920%22%20height%3D%22420%22%20rx%3D%2228%22%20fill%3D%22%23fffaf0%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%226%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22190%22%20y%3D%22210%22%20font-family%3D%22ui-serif%2C%20Georgia%22%20font-size%3D%2266%22%20fill%3D%22%231a1a1a%22%3EAniversario%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22190%22%20y%3D%22270%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2228%22%20fill%3D%22%235b5b5b%22%3Ekermese%20%E2%80%A2%20comidas%20%E2%80%A2%20recuerdos%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22940%22%20cy%3D%22250%22%20r%3D%2270%22%20fill%3D%22%231565c0%22%20opacity%3D%220.10%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22980%22%20cy%3D%22300%22%20r%3D%2270%22%20fill%3D%22%237b1fa2%22%20opacity%3D%220.10%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22900%22%20cy%3D%22310%22%20r%3D%2270%22%20fill%3D%22%23ef6c00%22%20opacity%3D%220.10%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22190%22%20y%3D%22320%22%20width%3D%22820%22%20height%3D%2244%22%20rx%3D%2214%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.65%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22190%22%20y%3D%22380%22%20width%3D%22640%22%20height%3D%2244%22%20rx%3D%2214%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.65%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22190%22%20y%3D%22440%22%20width%3D%22760%22%20height%3D%2244%22%20rx%3D%2214%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.65%22%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">Eventos</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">Cronista de plaza</span>
+            </div>
+            <h2 class="headline">Pasó el aniversario del pueblo: devoción, kermese y relatos del patrono</h2>
+            <p class="excerpt">Se recordó al patrono, conocido popularmente como “el Negro” o “el Africano”, y a su hija “la Bella y Pura”. Hubo comidas y kermese.</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        </article><article class="card" tabindex="0" role="link" aria-label="Abrir nota: Sale un nuevo libro de homenajes a “la Bella y Pura”: guiños a una canción famosa">
+          <div class="thumb">
+            <img alt="Miniatura de Cultura" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22700%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20x2%3D%221%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23efe6ff%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23f6f2e8%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%221200%22%20height%3D%22700%22%20fill%3D%22url(%23bg)%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22210%22%20y%3D%22130%22%20width%3D%22780%22%20height%3D%22460%22%20rx%3D%2224%22%20fill%3D%22%23fffaf0%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%226%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22260%22%20y%3D%22170%22%20width%3D%22680%22%20height%3D%2270%22%20rx%3D%2216%22%20fill%3D%22%236a1b9a%22%20opacity%3D%220.12%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22280%22%20y%3D%22220%22%20font-family%3D%22ui-serif%2C%20Georgia%22%20font-size%3D%2252%22%20fill%3D%22%233a1a4a%22%3ENuevo%20libro%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22260%22%20y%3D%22270%22%20width%3D%22680%22%20height%3D%2240%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22260%22%20y%3D%22325%22%20width%3D%22620%22%20height%3D%2240%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22260%22%20y%3D%22380%22%20width%3D%22660%22%20height%3D%2240%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M340%20520%20C%20420%20450%2C%20500%20450%2C%20580%20520%22%20fill%3D%22none%22%20stroke%3D%22%236a1b9a%22%20stroke-width%3D%2214%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M620%20520%20C%20700%20450%2C%20780%20450%2C%20860%20520%22%20fill%3D%22none%22%20stroke%3D%22%230f5c6e%22%20stroke-width%3D%2214%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">Cultura</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">Suplemento Cultural</span>
+            </div>
+            <h2 class="headline">Sale un nuevo libro de homenajes a “la Bella y Pura”: guiños a una canción famosa</h2>
+            <p class="excerpt">El autor presenta una recopilación de textos devocionales. Habla de su admiración por el fundador y por su hija, y cita ‘aquella canción en su honor’.</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        </article><article class="card" tabindex="0" role="link" aria-label="Abrir nota: Carta firmada por S. Gutiérrez: denuncia un desagüe y acusa a su vecino de ‘hacerse el importante’">
+          <div class="thumb">
+            <img alt="Miniatura de Reclamos" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22700%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%221200%22%20height%3D%22700%22%20fill%3D%22%23f6f2e8%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22140%22%20y%3D%22110%22%20width%3D%22920%22%20height%3D%22480%22%20rx%3D%2228%22%20fill%3D%22%23fffaf0%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%226%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22210%22%20y%3D%22180%22%20width%3D%22360%22%20height%3D%22280%22%20rx%3D%2218%22%20fill%3D%22%23e8ddc6%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22250%22%20y%3D%22240%22%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23c7b79b%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22390%22%20y%3D%22240%22%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23c7b79b%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M210%20460%20L570%20460%22%20stroke%3D%22%23a88f6a%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M220%20480%20C%20320%20520%2C%20420%20520%2C%20560%20500%22%20stroke%3D%22%231565c0%22%20stroke-width%3D%2210%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22620%22%20y%3D%22240%22%20font-family%3D%22ui-serif%2C%20Georgia%22%20font-size%3D%2254%22%20fill%3D%22%231a1a1a%22%3ECarta%20abierta%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22620%22%20y%3D%22290%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2228%22%20fill%3D%22%235b5b5b%22%3Ereclamo%20vecinal%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22620%22%20y%3D%22330%22%20width%3D%22380%22%20height%3D%2240%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22620%22%20y%3D%22385%22%20width%3D%22320%22%20height%3D%2240%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22620%22%20y%3D%22440%22%20width%3D%22410%22%20height%3D%2240%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22620%22%20y%3D%22540%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2224%22%20fill%3D%22%23ef6c00%22%3ES.%20Guti%C3%A9rrez%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">Reclamos</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">Mesa de lectores</span>
+            </div>
+            <h2 class="headline">Carta firmada por S. Gutiérrez: denuncia un desagüe y acusa a su vecino de ‘hacerse el importante’</h2>
+            <p class="excerpt">Un vecino apunta contra Alan Cavazanjas por un desagüe que, dice, deja agua sucia en la calle. También hay críticas personales y una anécdota con flores.</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        </article><article class="card" tabindex="0" role="link" aria-label="Abrir nota: Avisos y clasificados: ventas, trueques y un mensaje que huele a acertijo">
+          <div class="thumb">
+            <img alt="Miniatura de Avisos" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22700%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%221200%22%20height%3D%22700%22%20fill%3D%22%23f6f2e8%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22120%22%20y%3D%22120%22%20width%3D%22960%22%20height%3D%22460%22%20rx%3D%2228%22%20fill%3D%22%23fffaf0%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%226%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22170%22%20y%3D%22210%22%20font-family%3D%22ui-serif%2C%20Georgia%22%20font-size%3D%2264%22%20fill%3D%22%231a1a1a%22%3EAvisos%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20opacity%3D%220.85%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22170%22%20y%3D%22250%22%20width%3D%22860%22%20height%3D%2270%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22170%22%20y%3D%22340%22%20width%3D%22860%22%20height%3D%2270%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Crect%20x%3D%22170%22%20y%3D%22430%22%20width%3D%22860%22%20height%3D%2270%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23d9d2c3%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22190%22%20y%3D%22292%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2228%22%20fill%3D%22%23455a64%22%3E%E2%80%A2%20se%20venden%20cosas%20raras%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22190%22%20y%3D%22382%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2228%22%20fill%3D%22%23455a64%22%3E%E2%80%A2%20servicios%20y%20trueques%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22190%22%20y%3D%22472%22%20font-family%3D%22ui-monospace%2C%20monospace%22%20font-size%3D%2228%22%20fill%3D%22%23455a64%22%3E%E2%80%A2%20mensaje%20codificado%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">Avisos</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">Clasificados</span>
+            </div>
+            <h2 class="headline">Avisos y clasificados: ventas, trueques y un mensaje que huele a acertijo</h2>
+            <p class="excerpt">Entre lo típico y lo raro del desierto, aparecen anuncios de todo tipo. Uno, firmado “Soq.Gut.”, trae un texto en clave.</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        </article></div>
+          </section>
+
+          <aside class="side">
+            <div class="panel">
+              <h3>El clima emocional</h3>
+              <p>Viento de historias, sol de sospechas y sombra de “¿quién fue?”.</p>
+            </div>
+
+            <div class="panel">
+              <h3>Edición del día</h3>
+              <p>Si algo parece demasiado específico… probablemente lo sea.</p>
+              <div class="ticker">
+                <div class="tick">
+                  <div class="mini">★</div>
+                  <p class="t"><strong>Recomendado:</strong> leé “Avisos” con atención.</p>
+                </div>
+                <div class="tick">
+                  <div class="mini">✎</div>
+                  <p class="t"><strong>Cartas:</strong> la sección “Reclamos” está picante.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <footer>
+        <div>© <span id="year">2025</span> La gaceta de Cochinoca • Diario ficticio</div>
+        <div style="font-family:var(--mono)">Tip: abrí una nota y volvé con “Atrás” o el botón superior.</div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // ===== Helpers de miniaturas (SVG data URIs) =====
+    function svgDataURI(svg){
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg.trim());
+    }
+
+    const thumbs = {
+      Policiales: svgDataURI(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#f8f2e8"/>
+              <stop offset="1" stop-color="#efe6d7"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="700" fill="url(#g)"/>
+          <rect x="90" y="90" width="1020" height="520" rx="28" fill="#ffffff" opacity="0.72" stroke="#d9d2c3" stroke-width="6"/>
+          <rect x="140" y="150" width="920" height="70" rx="18" fill="#ffffff" opacity="0.6"/>
+          <rect x="140" y="250" width="920" height="48" rx="14" fill="#ffffff" opacity="0.6"/>
+          <rect x="140" y="320" width="760" height="48" rx="14" fill="#ffffff" opacity="0.6"/>
+          <path d="M240 500 C 330 430, 430 430, 520 500" fill="none" stroke="#b71c1c" stroke-width="16" stroke-linecap="round"/>
+          <path d="M520 500 C 610 430, 710 430, 800 500" fill="none" stroke="#2e7d32" stroke-width="16" stroke-linecap="round"/>
+          <path d="M300 560 C 390 490, 470 490, 560 560" fill="none" stroke="#1565c0" stroke-width="16" stroke-linecap="round"/>
+          <text x="930" y="585" font-family="ui-monospace, monospace" font-size="46" fill="#5b5b5b">soquetin</text>
+        </svg>
+      `),
+      moda: svgDataURI(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+          <defs>
+            <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#0f0f12"/>
+              <stop offset="1" stop-color="#1e1e24"/>
+            </linearGradient>
+            <linearGradient id="flag" x1="0" x2="1">
+              <stop offset="0" stop-color="#d32f2f"/>
+              <stop offset="0.2" stop-color="#f57c00"/>
+              <stop offset="0.4" stop-color="#fbc02d"/>
+              <stop offset="0.6" stop-color="#388e3c"/>
+              <stop offset="0.8" stop-color="#1976d2"/>
+              <stop offset="1" stop-color="#7b1fa2"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="700" fill="url(#bg)"/>
+          <circle cx="320" cy="300" r="170" fill="#0b0b0e"/>
+          <rect x="520" y="190" width="520" height="320" rx="36" fill="#12121a" stroke="#2d2d39" stroke-width="6"/>
+          <rect x="560" y="230" width="440" height="44" rx="14" fill="url(#flag)"/>
+          <rect x="560" y="290" width="200" height="160" rx="22" fill="#6d4c41" opacity="0.92"/>
+          <circle cx="620" cy="360" r="26" fill="#ffd54f"/>
+          <circle cx="700" cy="360" r="26" fill="#90caf9"/>
+          <text x="560" y="560" font-family="ui-serif, Georgia" font-size="54" fill="#eaeaea">All black</text>
+          <text x="560" y="605" font-family="ui-monospace, monospace" font-size="28" fill="#bdbdbd">+ detalles kawaii</text>
+        </svg>
+      `),
+      eventos: svgDataURI(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+          <rect width="1200" height="700" fill="#f6f2e8"/>
+          <path d="M0 520 C 250 440, 430 460, 650 520 C 860 578, 1000 570, 1200 520 L1200 700 L0 700 Z" fill="#e8ddc6"/>
+          <rect x="140" y="120" width="920" height="420" rx="28" fill="#fffaf0" stroke="#d9d2c3" stroke-width="6"/>
+          <text x="190" y="210" font-family="ui-serif, Georgia" font-size="66" fill="#1a1a1a">Aniversario</text>
+          <text x="190" y="270" font-family="ui-monospace, monospace" font-size="28" fill="#5b5b5b">kermese • comidas • recuerdos</text>
+          <circle cx="940" cy="250" r="70" fill="#1565c0" opacity="0.10"/>
+          <circle cx="980" cy="300" r="70" fill="#7b1fa2" opacity="0.10"/>
+          <circle cx="900" cy="310" r="70" fill="#ef6c00" opacity="0.10"/>
+          <rect x="190" y="320" width="820" height="44" rx="14" fill="#ffffff" opacity="0.65"/>
+          <rect x="190" y="380" width="640" height="44" rx="14" fill="#ffffff" opacity="0.65"/>
+          <rect x="190" y="440" width="760" height="44" rx="14" fill="#ffffff" opacity="0.65"/>
+        </svg>
+      `),
+      cultura: svgDataURI(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+          <defs>
+            <linearGradient id="bg" x1="0" x2="1">
+              <stop offset="0" stop-color="#efe6ff"/>
+              <stop offset="1" stop-color="#f6f2e8"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="700" fill="url(#bg)"/>
+          <rect x="210" y="130" width="780" height="460" rx="24" fill="#fffaf0" stroke="#d9d2c3" stroke-width="6"/>
+          <rect x="260" y="170" width="680" height="70" rx="16" fill="#6a1b9a" opacity="0.12"/>
+          <text x="280" y="220" font-family="ui-serif, Georgia" font-size="52" fill="#3a1a4a">Nuevo libro</text>
+          <rect x="260" y="270" width="680" height="40" rx="12" fill="#ffffff" opacity="0.7"/>
+          <rect x="260" y="325" width="620" height="40" rx="12" fill="#ffffff" opacity="0.7"/>
+          <rect x="260" y="380" width="660" height="40" rx="12" fill="#ffffff" opacity="0.7"/>
+          <path d="M340 520 C 420 450, 500 450, 580 520" fill="none" stroke="#6a1b9a" stroke-width="14" stroke-linecap="round"/>
+          <path d="M620 520 C 700 450, 780 450, 860 520" fill="none" stroke="#0f5c6e" stroke-width="14" stroke-linecap="round"/>
+        </svg>
+      `),
+      reclamos: svgDataURI(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+          <rect width="1200" height="700" fill="#f6f2e8"/>
+          <rect x="140" y="110" width="920" height="480" rx="28" fill="#fffaf0" stroke="#d9d2c3" stroke-width="6"/>
+          <rect x="210" y="180" width="360" height="280" rx="18" fill="#e8ddc6" stroke="#d9d2c3" stroke-width="4"/>
+          <rect x="250" y="240" width="120" height="90" fill="#c7b79b"/>
+          <rect x="390" y="240" width="120" height="90" fill="#c7b79b"/>
+          <path d="M210 460 L570 460" stroke="#a88f6a" stroke-width="10" stroke-linecap="round"/>
+          <path d="M220 480 C 320 520, 420 520, 560 500" stroke="#1565c0" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <text x="620" y="240" font-family="ui-serif, Georgia" font-size="54" fill="#1a1a1a">Carta abierta</text>
+          <text x="620" y="290" font-family="ui-monospace, monospace" font-size="28" fill="#5b5b5b">reclamo vecinal</text>
+          <rect x="620" y="330" width="380" height="40" rx="12" fill="#ffffff" opacity="0.7"/>
+          <rect x="620" y="385" width="320" height="40" rx="12" fill="#ffffff" opacity="0.7"/>
+          <rect x="620" y="440" width="410" height="40" rx="12" fill="#ffffff" opacity="0.7"/>
+          <text x="620" y="540" font-family="ui-monospace, monospace" font-size="24" fill="#ef6c00">S. Gutiérrez</text>
+        </svg>
+      `),
+      avisos: svgDataURI(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+          <rect width="1200" height="700" fill="#f6f2e8"/>
+          <rect x="120" y="120" width="960" height="460" rx="28" fill="#fffaf0" stroke="#d9d2c3" stroke-width="6"/>
+          <text x="170" y="210" font-family="ui-serif, Georgia" font-size="64" fill="#1a1a1a">Avisos</text>
+          <g opacity="0.85">
+            <rect x="170" y="250" width="860" height="70" rx="16" fill="#ffffff" stroke="#d9d2c3" stroke-width="3"/>
+            <rect x="170" y="340" width="860" height="70" rx="16" fill="#ffffff" stroke="#d9d2c3" stroke-width="3"/>
+            <rect x="170" y="430" width="860" height="70" rx="16" fill="#ffffff" stroke="#d9d2c3" stroke-width="3"/>
+          </g>
+          <text x="190" y="292" font-family="ui-monospace, monospace" font-size="28" fill="#455a64">• se venden cosas raras</text>
+          <text x="190" y="382" font-family="ui-monospace, monospace" font-size="28" fill="#455a64">• servicios y trueques</text>
+          <text x="190" y="472" font-family="ui-monospace, monospace" font-size="28" fill="#455a64">• mensaje codificado</text>
+        </svg>
+      `)
+    };
+
+    // ===== Datos del diario (notas) =====
+    const notes = [
+      {
+        id: "Policiales-mural",
+        category: "Policiales",
+        title: "Borraron un mural histórico y dejaron grafitis de frutas: firma “soquetin”",
+        author: "Redacción local",
+        thumbnail: thumbs.Policiales,
+        excerpt: "Vecinos amanecieron con la pared “lavada” de blanco. Donde antes había un mural querido, ahora: verduras, frutas y una firma.",
+        body: `
+          <p>La mañana en Cochinoca arrancó con una sorpresa amarga: la pared que hasta ayer lucía un mural celebrado por vecinos y visitantes apareció <strong>pintada completamente de blanco</strong>.</p>
+          <p>Sobre esa capa nueva, alguien dejó grafitis burdos con <strong>frutas y verduras</strong> y una firma que se repite en varios trazos: <strong>“soquetin”</strong>.</p>
+          <div class="pull"><strong>“No es solo pintura: es memoria del pueblo”</strong>, dijo una vecina, mientras señalaba el contorno donde antes se distinguían figuras y colores.</div>
+          <p>Por el momento no hay testigos confirmados, y el reclamo principal apunta a recuperar el mural original. Algunos proponen organizar una jornada comunitaria para <em>reconstruirlo</em>; otros piden primero identificar responsables.</p>
+          <p>Desde la comisaría local indicaron que, si bien se trata de un hecho de <strong>daño</strong>, se recomienda radicar denuncia con fotos comparativas para facilitar el registro.</p>
+          <p class="note">Nota de la redacción: si tenés fotos del mural anterior (cualquier ángulo), acercalas a la Gaceta para colaborar con un posible rediseño comunitario.</p>
+        `
+      },
+      {
+        id: "moda-ana-sakayama",
+        category: "moda",
+        title: "Ana Sakayama presenta su “all black” con detalles: ‘modo aliade activado’",
+        author: "Sección Moda",
+        thumbnail: thumbs.moda,
+        excerpt: "Entre sol norteño y estética otaku, Ana cuenta su conjunto favorito: negro total, guiños kawaii y un saludo especial para Alan.",
+        body: `
+          <p>En una edición que mezcla el polvo del camino con el glamour de la vereda, <strong>Ana Sakayama</strong> nos comparte su conjunto preferido del momento: <strong>moda all black</strong>, pensado para el sol y el carácter de Cochinoca.</p>
+          <p>El look incluye <strong>gorra negra</strong> (aunque “a veces azul, según el arco narrativo del día”), <strong>pasamontañas oscuro</strong> para bancar el sol, y un <strong>pañuelo violeta</strong> que, según Ana, “sube +10 de carisma”.</p>
+          <p>El detalle destacado: una <strong>banda con la bandera queer</strong> para mostrarse como <em>aliade</em>. “No es cosplay, es mi build”, comentó entre risas.</p>
+          <div class="two-col">
+            <div class="ad">
+              <div class="h">Accesorios</div>
+              <p><strong>Mochilita marrón</strong> con un diseño <em>kawaii</em> “muy lindo, tipo ‘me acompaña aunque el mundo sea desierto’”.</p>
+            </div>
+            <div class="ad">
+              <div class="h">Calzado</div>
+              <p><strong>Zapatillas marrón</strong> con motivos (sí, “motivos”; no, no quiso spoilearlos).</p>
+            </div>
+          </div>
+          <p>Antes de irse, Ana pidió un espacio para lo importante: <strong>“un saludito a Alan, mi amorcito”</strong>. Y cerró con una frase que quedó flotando en la redacción: “Si el sol pega fuerte… yo también, pero con estilo”.</p>
+          <p class="note">Glosario exprés (por la redacción): “build” = configuración personal; “arco narrativo” = cómo se siente ese día; “spoiler” = Ana no revela detalles antes de tiempo.</p>
+        `
+      },
+      {
+        id: "eventos-aniversario",
+        category: "eventos",
+        title: "Pasó el aniversario del pueblo: devoción, kermese y relatos del patrono",
+        author: "Cronista de plaza",
+        thumbnail: thumbs.eventos,
+        excerpt: "Se recordó al patrono, conocido popularmente como “el Negro” o “el Africano”, y a su hija “la Bella y Pura”. Hubo comidas y kermese.",
+        body: `
+          <p>Hace poco se celebró el <strong>aniversario de Cochinoca</strong>, y como manda la costumbre, la comunidad se reunió para recordar historias, compartir mesa y sostener la tradición.</p>
+          <p>En los discursos apareció, una vez más, la figura del patrono al que varios llaman por apodos históricos como <strong>“el Negro”</strong> o <strong>“el Africano”</strong>, y también la mención recurrente a su hija, <strong>“la Bella y Pura”</strong>, parte central del relato popular.</p>
+          <div class="pull">Entre velas, banderines y comentarios de pasillo, se repitió la idea de que “sin memoria no hay pueblo”.</div>
+          <p>Más allá del tono ceremonial, el evento se llenó de detalles cotidianos: una <strong>kermese</strong> con juegos sencillos, rifas, y el clásico ida y vuelta de “¿quién hizo tal empanada?” “¿de quién era ese pastel?” (nadie lo admitió oficialmente, pero todos lo sabían).</p>
+          <p>La jornada cerró sin incidentes, con promesas de repetir el encuentro “con más sombra” y “menos viento”, dos deseos que en Cochinoca son casi plegarias meteorológicas.</p>
+          <p class="note">Dato de color: el debate del año fue si el ají estaba “suave”, “picante” o “directamente un mensaje”. No hubo consenso.</p>
+        `
+      },
+      {
+        id: "cultura-libro",
+        category: "cultura",
+        title: "Sale un nuevo libro de homenajes a “la Bella y Pura”: guiños a una canción famosa",
+        author: "Suplemento Cultural",
+        thumbnail: thumbs.cultura,
+        excerpt: "El autor presenta una recopilación de textos devocionales. Habla de su admiración por el fundador y por su hija, y cita ‘aquella canción en su honor’.",
+        body: `
+          <p>La cultura local suma una novedad: se presentó un nuevo libro centrado en <strong>homenajes a “la Bella y Pura”</strong>, una figura que atraviesa el imaginario del pueblo.</p>
+          <p>El autor, en un prólogo de tono íntimo, afirma que su escritura nace de una <strong>devoción</strong> sostenida por años hacia el fundador (mencionado en relatos comunitarios) y hacia su hija, a quien describe como “símbolo de claridad en tiempos ásperos”.</p>
+          <div class="pull">El texto hace referencia a <strong>“aquella famosa canción en su honor”</strong>, sin citarla completa, pero con suficientes guiños como para que el lector local la reconozca al vuelo.</div>
+          <p>La compilación incluye poemas, pequeñas escenas y fragmentos que alternan entre lo ceremonial y lo doméstico: una forma de recordar que, en pueblos chicos, la historia también vive en los detalles.</p>
+          <p class="note">La Gaceta recuerda: este diario es ficticio, pero el cariño con el que la gente cuenta sus cosas… ese sí es real.</p>
+        `
+      },
+      {
+        id: "reclamos-carta",
+        category: "reclamos",
+        title: "Carta firmada por S. Gutiérrez: denuncia un desagüe y acusa a su vecino de ‘hacerse el importante’",
+        author: "Mesa de lectores",
+        thumbnail: thumbs.reclamos,
+        excerpt: "Un vecino apunta contra Alan Cavazanjas por un desagüe que, dice, deja agua sucia en la calle. También hay críticas personales y una anécdota con flores.",
+        body: `
+          <p>La redacción recibió una carta firmada por <strong>S. Gutiérrez</strong>, acompañada por una foto de una vivienda y un frente de calle con una marca de humedad persistente.</p>
+          <p>En su texto, Gutiérrez sostiene que su vecino <strong>Alan Cavazanjas</strong> habría realizado un desagüe que “larga toda el agua sucia a la calle”, formando “un arroyito” frente a varias casas.</p>
+          <p>Según la carta, el problema alcanzó un momento especialmente indignante cuando Gutiérrez fue a dejar <strong>flores bajo el cartel</strong> que recuerda la muerte del “Africano”, y “se mojaron todas” por el paso del agua.</p>
+          <div class="pull">La carta también incluye críticas personales: menciona que Alan “se cree importante porque tiene agua en la casa”, y lo cuestiona por tener <strong>garaje sin auto</strong>.</div>
+          <p>Finalmente, el firmante agrega —en tono claramente molesto— que “con todo eso consiguió novia”, un amor “muy poco merecido”, dice.</p>
+          <p>Desde la Gaceta invitamos a las partes a canalizar el reclamo por vía formal. Un desagüe mal dirigido es un problema real; el resto… suele empeorar con chisme.</p>
+          <p class="note">Si querés publicar una respuesta, enviá una carta breve (máx. 1.500 caracteres) con tu nombre y un contacto. La redacción se reserva edición por respeto y claridad.</p>
+        `
+      },
+      {
+        id: "avisos-clasificados",
+        category: "avisos",
+        title: "Avisos y clasificados: ventas, trueques y un mensaje que huele a acertijo",
+        author: "Clasificados",
+        thumbnail: thumbs.avisos,
+        excerpt: "Entre lo típico y lo raro del desierto, aparecen anuncios de todo tipo. Uno, firmado “Soq.Gut.”, trae un texto en clave.",
+        body: `
+          <p>En un pueblo que conoce el silencio del desierto, los avisos cumplen doble función: <strong>comercio</strong> y <strong>señales</strong>. Esta semana llegaron varios, desde lo cotidiano hasta lo inquietantemente específico.</p>
+
+          <div class="classifieds">
+            <div class="ad">
+              <div class="h">Se vende</div>
+              <p>Bidón de 20L “casi nuevo”. Ideal para viajes largos o cuando el viento decide cortarte el plan.</p>
+            </div>
+
+            <div class="ad">
+              <div class="h">Se permuta</div>
+              <p>Sombrero de ala ancha por linterna con pilas (no preguntes por qué, solo entendé el sol).</p>
+            </div>
+
+            <div class="ad">
+              <div class="h">Servicios</div>
+              <p>Arreglo de bisagras, puertas, rejas y “cosas que se traban”. Consultas al atardecer.</p>
+            </div>
+
+            <div class="ad">
+              <div class="h">Hallazgo</div>
+              <p>Se encontró pañuelo violeta cerca de la plaza. Pasar por la despensa y describirlo sin chamuyar.</p>
+            </div>
+
+            <div class="ad">
+              <div class="h">Mensaje</div>
+              <p><strong>Soq.Gut.</strong> firma: <em>“Password - Apodo de ella (suspiro): ultima palabra del nombre de la Bella y pura + Graffiti”</em></p>
+            </div>
+          </div>
+
+          <p class="note">Nota al margen: la redacción no interpreta claves… pero sí las imprime, porque la vida es corta y el misterio es largo.</p>
+        `
+      }
+    ];
+
+    const categoryInfo = {
+      all: { label: "Todo", dot: "all" },
+      Policiales: { label: "Policiales", dot: "Policiales" },
+      moda: { label: "Moda", dot: "moda" },
+      eventos: { label: "Eventos", dot: "eventos" },
+      cultura: { label: "Cultura", dot: "cultura" },
+      reclamos: { label: "Reclamos", dot: "reclamos" },
+      avisos: { label: "Avisos", dot: "avisos" }
+    };
+
+    let state = {
+      filter: "all"
+    };
+
+    // ===== Render de filtros =====
+    function renderFilters(){
+      const nav = document.getElementById("filters");
+      nav.innerHTML = "";
+      Object.keys(categoryInfo).forEach(key=>{
+        const btn = document.createElement("button");
+        btn.className = "chip";
+        btn.type = "button";
+        btn.setAttribute("aria-pressed", key === state.filter ? "true" : "false");
+        btn.innerHTML = `<span class="dot ${key}"></span>${categoryInfo[key].label}`;
+        btn.addEventListener("click", ()=>{
+          state.filter = key;
+          renderFilters();
+          renderHome();
+          // Mantener hash si estamos en home
+          if(!location.hash || location.hash === "#/" || location.hash === "#/home"){
+            history.replaceState(null,"","#/home");
+          }
+        });
+        nav.appendChild(btn);
+      });
+    }
+
+    // ===== Home =====
+    function renderHome(){
+      const app = document.getElementById("app");
+
+      const visible = state.filter === "all"
+        ? notes
+        : notes.filter(n => n.category === state.filter);
+
+      const topStory = visible[0] || notes[0];
+
+      app.innerHTML = `
+        <div class="grid" aria-label="Portada">
+          <section>
+            <div class="panel" style="margin-bottom:14px">
+              <h3 style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                <span>Portada</span>
+                <span class="kicker" style="margin:0">Titulares del día</span>
+              </h3>
+              <p>Una edición bien de Cochinoca: un poco de misterio, un poco de chisme y bastante sol.</p>
+              <div class="ticker">
+                ${notes.map((n,i)=>`
+                  <div class="tick">
+                    <div class="mini">${String(i+1).padStart(2,"0")}</div>
+                    <p class="t"><strong>${categoryInfo[n.category].label}:</strong> ${escapeHtml(n.title)}</p>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="cards" id="cards"></div>
+          </section>
+
+          <aside class="side">
+            <div class="panel">
+              <h3>El clima emocional</h3>
+              <p>Viento de historias, sol de sospechas y sombra de “¿quién fue?”.</p>
+            </div>
+
+            <div class="panel">
+              <h3>Edición del día</h3>
+              <p>Si algo parece demasiado específico… probablemente lo sea.</p>
+              <div class="ticker">
+                <div class="tick">
+                  <div class="mini">★</div>
+                  <p class="t"><strong>Recomendado:</strong> leé “Avisos” con atención.</p>
+                </div>
+                <div class="tick">
+                  <div class="mini">✎</div>
+                  <p class="t"><strong>Cartas:</strong> la sección “Reclamos” está picante.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      `;
+
+      const cards = document.getElementById("cards");
+      visible.forEach(n=>{
+        const el = document.createElement("article");
+        el.className = "card";
+        el.tabIndex = 0;
+        el.setAttribute("role","link");
+        el.setAttribute("aria-label", `Abrir nota: ${n.title}`);
+        el.innerHTML = `
+          <div class="thumb">
+            <img alt="Miniatura de ${categoryInfo[n.category].label}" src="${n.thumbnail}">
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              <span class="tag">${categoryInfo[n.category].label}</span>
+              <span class="kicker" style="margin:0;letter-spacing:.08em">${escapeHtml(n.author)}</span>
+            </div>
+            <h2 class="headline">${escapeHtml(n.title)}</h2>
+            <p class="excerpt">${escapeHtml(n.excerpt)}</p>
+            <div class="readmore">Leer nota completa →</div>
+          </div>
+        `;
+        el.addEventListener("click", ()=>goToArticle(n.id));
+        el.addEventListener("keydown",(e)=>{
+          if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            goToArticle(n.id);
+          }
+        });
+        cards.appendChild(el);
+      });
+    }
+
+    // ===== Article =====
+    function renderArticle(id){
+      const app = document.getElementById("app");
+      const n = notes.find(x=>x.id===id);
+      if(!n){
+        app.innerHTML = `
+          <div class="article">
+            <a class="back" href="#/home">← Volver a portada</a>
+            <div class="panel">
+              <h3>No se encontró la nota</h3>
+              <p>Tal vez la llevó el viento… o el hash está mal.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      app.innerHTML = `
+        <div class="article" aria-label="Nota completa">
+          <a class="back" href="#/home">← Volver a portada</a>
+
+          <section class="hero">
+            <div class="img">
+              <img alt="Imagen de la nota" src="${n.thumbnail}">
+            </div>
+            <div class="inner">
+              <div class="tagrow">
+                <span class="tag">${categoryInfo[n.category].label}</span>
+              </div>
+              <h1>${escapeHtml(n.title)}</h1>
+              <div class="byline">
+                <span>Por ${escapeHtml(n.author)}</span>
+                <span>•</span>
+                <span id="articleDate"></span>
+                <span>•</span>
+                <span style="text-transform:uppercase;letter-spacing:.10em">Cochinoca</span>
+              </div>
+              <div class="content">${n.body}</div>
+            </div>
+          </section>
+        </div>
+      `;
+
+      document.getElementById("articleDate").textContent = prettyDate(new Date());
+      window.scrollTo({top:0, behavior:"instant"});
+    }
+
+    // ===== Router =====
+    function goToArticle(id){
+      location.hash = `#/nota/${encodeURIComponent(id)}`;
+    }
+
+    function route(){
+      const h = location.hash || "#/home";
+      const parts = h.replace(/^#\//,"").split("/").filter(Boolean);
+
+      // Home
+      if(parts.length === 0 || parts[0] === "home"){
+        renderHome();
+        return;
+      }
+
+      // Nota
+      if(parts[0] === "nota" && parts[1]){
+        renderArticle(decodeURIComponent(parts[1]));
+        return;
+      }
+
+      // fallback
+      location.hash = "#/home";
+    }
+
+    // ===== Utilidades =====
+    function prettyDate(d){
+      // es-AR (Argentina)
+      return d.toLocaleDateString("es-AR", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // ===== Init =====
+    (function init(){
+      const now = new Date();
+      document.getElementById("today").textContent = prettyDate(now);
+      document.getElementById("year").textContent = now.getFullYear();
+
+      renderFilters();
+      window.addEventListener("hashchange", route);
+      route();
+    })();
+  </script>
+
+
+</body></html>
