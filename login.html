@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Corporación Cochinoca - Login</title>
+  <style>
+    :root{
+      --bg:#050805;
+      --fg:#b6ffb6;
+      --muted:#5d9a5d;
+      --accent:#2bff2b;
+      --danger:#ff5d5d;
+      --panel:#071007;
+      --border:rgba(43,255,43,.25);
+      --shadow:rgba(43,255,43,.12);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background:
+        radial-gradient(1000px 500px at 50% 0%, rgba(43,255,43,.08), transparent 60%),
+        radial-gradient(900px 600px at 20% 80%, rgba(43,255,43,.06), transparent 60%),
+        linear-gradient(180deg, #020302, var(--bg));
+      color:var(--fg);
+      overflow:hidden;
+    }
+    .scanlines:before{
+      content:"";
+      position:fixed; inset:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.03),
+        rgba(255,255,255,.03) 1px,
+        rgba(0,0,0,0) 3px,
+        rgba(0,0,0,0) 6px
+      );
+      pointer-events:none;
+      mix-blend-mode:overlay;
+      opacity:.35;
+    }
+    .wrap{
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+    .card{
+      width:min(520px, 92vw);
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(7,16,7,.8), rgba(4,8,4,.65));
+      box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 18px 60px rgba(0,0,0,.65), 0 0 60px var(--shadow);
+      border-radius:14px;
+      padding:22px 20px 18px;
+      position:relative;
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border:1px solid rgba(43,255,43,.22);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      user-select:none;
+    }
+    .dot{
+      width:7px; height:7px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 12px rgba(43,255,43,.9);
+    }
+    h1{
+      margin:16px 0 2px;
+      font-size:18px;
+      color:var(--muted);
+      font-weight:600;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+    h2{
+      margin:0 0 18px;
+      font-size:44px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--fg);
+      text-shadow: 0 0 18px rgba(43,255,43,.25);
+    }
+    .subtitle{
+      margin:-6px 0 16px;
+      color:rgba(182,255,182,.75);
+      font-size:12px;
+    }
+    .row{ display:grid; gap:10px; }
+    label{
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:10px;
+      border:1px solid rgba(43,255,43,.22);
+      background:rgba(0,0,0,.35);
+      color:var(--fg);
+      outline:none;
+      font-size:14px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.4) inset;
+    }
+    input:focus{
+      border-color: rgba(43,255,43,.55);
+      box-shadow: 0 0 0 3px rgba(43,255,43,.12);
+    }
+    .btn{
+      margin-top:12px;
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(43,255,43,.35);
+      background: linear-gradient(180deg, rgba(43,255,43,.18), rgba(43,255,43,.08));
+      color:var(--fg);
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition: transform .06s ease, filter .12s ease;
+    }
+    .btn:hover{ filter:brightness(1.06); }
+    .btn:active{ transform: translateY(1px); }
+    .msg{
+      margin-top:14px;
+      min-height:18px;
+      font-size:13px;
+      color:rgba(182,255,182,.85);
+    }
+    .msg.danger{ color: var(--danger); }
+    .msg.ok{ color: var(--accent); }
+
+    /* Progress */
+    .progress{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(43,255,43,.22);
+      background:rgba(0,0,0,.35);
+      overflow:hidden;
+      display:none;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(43,255,43,.35), rgba(43,255,43,.85));
+      box-shadow: 0 0 12px rgba(43,255,43,.55);
+    }
+
+    /* "Escritorio" */
+    .desktop{
+      position:fixed; inset:0;
+      display:none;
+      background:
+        radial-gradient(900px 500px at 30% 10%, rgba(43,255,43,.08), transparent 65%),
+        radial-gradient(900px 600px at 70% 90%, rgba(43,255,43,.06), transparent 65%),
+        linear-gradient(180deg, #020302, #050805);
+    }
+    .taskbar{
+      position:absolute; left:0; right:0; bottom:0;
+      height:42px;
+      border-top:1px solid rgba(43,255,43,.18);
+      background:rgba(0,0,0,.45);
+      display:flex;
+      align-items:center;
+      padding:0 12px;
+      gap:10px;
+    }
+    .start{
+      width:34px; height:26px;
+      border-radius:8px;
+      border:1px solid rgba(43,255,43,.22);
+      background:rgba(43,255,43,.08);
+      box-shadow:0 0 22px rgba(43,255,43,.08);
+    }
+    .clock{ margin-left:auto; color:rgba(182,255,182,.65); font-size:12px; }
+
+    .icons{
+      position:absolute;
+      top:18px; left:18px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      width:320px;
+    }
+    .icon{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(43,255,43,.14);
+      background:rgba(0,0,0,.25);
+      user-select:none;
+      cursor:default;
+    }
+    .ico{
+      width:18px; height:14px;
+      border:1px solid rgba(43,255,43,.35);
+      border-bottom-width:3px;
+      border-radius:3px;
+      box-shadow:0 0 14px rgba(43,255,43,.12);
+      background:rgba(43,255,43,.06);
+      position:relative;
+    }
+    .ico:before{
+      content:"";
+      position:absolute; left:2px; top:-4px;
+      width:10px; height:6px;
+      border:1px solid rgba(43,255,43,.28);
+      border-bottom:none;
+      border-radius:3px 3px 0 0;
+      background:rgba(43,255,43,.05);
+    }
+    .icon span{
+      font-size:13px;
+      color:rgba(182,255,182,.85);
+    }
+
+    /* Blur helpers */
+    .blurred{
+      filter: blur(6px) brightness(.9);
+      transform: scale(1.01);
+      transition: filter .6s ease, transform .6s ease;
+    }
+
+    /* Ventana final */
+    .modal{
+      position:absolute;
+      left:50%; top:44%;
+      transform:translate(-50%,-50%);
+      width:min(760px, 92vw);
+      border-radius:14px;
+      border:1px solid rgba(43,255,43,.28);
+      background:rgba(7,16,7,.9);
+      box-shadow: 0 24px 80px rgba(0,0,0,.7), 0 0 70px rgba(43,255,43,.18);
+      display:none;
+      overflow:hidden;
+      z-index:5;
+    }
+    .modal .titlebar{
+      height:38px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:0 12px;
+      border-bottom:1px solid rgba(43,255,43,.18);
+      background:rgba(0,0,0,.25);
+      color:rgba(182,255,182,.7);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .winbtns{ margin-left:auto; display:flex; gap:8px; }
+    .wbtn{
+      width:10px; height:10px; border-radius:50%;
+      border:1px solid rgba(43,255,43,.25);
+      background:rgba(43,255,43,.08);
+    }
+    .modal .content{
+      padding:18px 18px 20px;
+      font-size:16px;
+      line-height:1.5;
+      color:rgba(182,255,182,.92);
+      white-space:pre-wrap;
+      min-height:180px;
+    }
+    .cursor{
+      display:inline-block;
+      width:10px;
+      height:18px;
+      background:rgba(43,255,43,.8);
+      margin-left:6px;
+      vertical-align:-3px;
+      animation: blink 1s steps(2,end) infinite;
+    }
+    @keyframes blink { 50%{ opacity:0; } }
+
+    /* Confeti */
+    canvas.confetti{
+      position:fixed; inset:0;
+      pointer-events:none;
+      display:none;
+      z-index:10;
+    }
+
+    /* Nota ética */
+    .note{
+      margin-top:10px;
+      font-size:11px;
+      color:rgba(182,255,182,.55);
+      line-height:1.35;
+    }
+    .note strong{ color:rgba(182,255,182,.75); }
+  </style>
+</head>
+<body class="scanlines">
+  <div class="wrap" id="loginScreen">
+    <div class="card">
+      <div class="badge"><span class="dot"></span> LOGIN</div>
+
+      <h1>Corporación</h1>
+      <h2>COCHINOCA</h2>
+      <div class="subtitle">Solo personal autorizado.</div>
+
+      <form id="form" autocomplete="off">
+        <div class="row">
+          <div>
+            <label for="user">Operador</label>
+            <input id="user" name="user" placeholder="USUARIO" />
+          </div>
+          <div>
+            <label for="pass">Código</label>
+            <input id="pass" name="pass" type="password" placeholder="•••••" />
+          </div>
+        </div>
+        <button class="btn" type="submit" id="enterBtn">Entrar</button>
+
+        <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+        <div class="msg" id="msg"></div>
+
+        <div class="note">
+          <strong>Importante:</strong> Si no entiende como funciona esta web, por favor dirijase al programa de jovenes estupidos en la oficina de al lado.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="desktop" id="desktop">
+    <div class="icons" id="icons"></div>
+    <div class="taskbar" id="taskbar">
+      <div class="start" title="Inicio"></div>
+      <div style="color:rgba(182,255,182,.55); font-size:12px;">SYS://COCHINOCA</div>
+      <div class="clock" id="clock">00:00</div>
+    </div>
+
+    <div class="modal" id="modal">
+      <div class="titlebar">
+        ventana_del_sistema.exe
+        <div class="winbtns">
+          <div class="wbtn"></div><div class="wbtn"></div><div class="wbtn"></div>
+        </div>
+      </div>
+      <div class="content" id="typed"></div>
+    </div>
+  </div>
+
+  <canvas class="confetti" id="confetti"></canvas>
+
+  <script>
+    // --- Config de tiempos ---
+    const LOGIN_PROGRESS_MS = 5000;   // barra visible 5s
+    const DESKTOP_DELAY_MS  = 10000;  // tiempo en escritorio antes de blur+ventana final
+    const LINE_PAUSE_MS     = 2000;   // pausa entre líneas del mensaje final
+    const CHAR_SPEED_MS     = 18;     // velocidad de tipeo por caracter
+
+    const form = document.getElementById('form');
+    const userEl = document.getElementById('user');
+    const passEl = document.getElementById('pass');
+    const msgEl  = document.getElementById('msg');
+    const progress = document.getElementById('progress');
+    const bar = document.getElementById('bar');
+    const enterBtn = document.getElementById('enterBtn');
+
+    const loginScreen = document.getElementById('loginScreen');
+    const desktop = document.getElementById('desktop');
+    const icons = document.getElementById('icons');
+    const modal = document.getElementById('modal');
+    const typed = document.getElementById('typed');
+    const clockEl = document.getElementById('clock');
+    const taskbar = document.getElementById('taskbar');
+
+    const incriminantes = [
+      "Delitos",
+      "Delitos malvados",
+      "Delitos muy malvados",
+      "Delitos demasiado malvados incluso para mi",
+      "Identidad secreta",
+      "Informe",
+      "Informe final",
+      "Informe final final",
+      "Informe final final final",
+      "Informe final esta ves si",
+      "Fotos de escarpines XXX"
+    ];
+
+    function setMsg(text, kind=""){
+      msgEl.className = "msg" + (kind ? " " + kind : "");
+      msgEl.textContent = text;
+    }
+    function norm(s){ return (s ?? "").trim().toLowerCase(); }
+
+    function tickClock(){
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      clockEl.textContent = `${hh}:${mm}`;
+    }
+    setInterval(tickClock, 1000);
+    tickClock();
+
+    function showProgress(ms){
+      progress.style.display = "block";
+      bar.style.width = "0%";
+      const start = performance.now();
+
+      // fuerza un reflow para que se vea el cambio y no "salte"
+      void progress.offsetWidth;
+
+      const t = setInterval(()=>{
+        const p = Math.min(1, (performance.now()-start)/ms);
+        bar.style.width = (p*100).toFixed(0) + "%";
+        if(p>=1) clearInterval(t);
+      }, 50);
+    }
+
+    function buildDesktopIcons(){
+      icons.innerHTML = "";
+      incriminantes.forEach(name=>{
+        const div = document.createElement('div');
+        div.className = "icon";
+        div.innerHTML = `<div class="ico"></div><span>${name}</span>`;
+        icons.appendChild(div);
+      });
+    }
+
+    const sleep = (ms)=> new Promise(r=>setTimeout(r, ms));
+
+    async function typewriterByLine(lines, charSpeed=20, linePause=2000){
+      typed.textContent = "";
+      const cursor = document.createElement('span');
+      cursor.className = "cursor";
+      typed.appendChild(cursor);
+
+      for(let li=0; li<lines.length; li++){
+        const line = lines[li];
+
+        for(let i=0;i<line.length;i++){
+          cursor.insertAdjacentText('beforebegin', line[i]);
+          await sleep(charSpeed);
+        }
+
+        if(li < lines.length - 1){
+          cursor.insertAdjacentText('beforebegin', "\n");
+          await sleep(linePause); // pausa ENTRE LÍNEAS
+        }
+      }
+      // deja cursor al final
+    }
+
+    function showDesktop(){
+      loginScreen.style.display = "none";
+      desktop.style.display = "block";
+      buildDesktopIcons();
+    }
+
+    async function blurThenModal(){
+      // esperar 10s para que puedan leer el escritorio
+      await sleep(DESKTOP_DELAY_MS);
+
+      // blur del fondo (iconos + taskbar)
+      icons.classList.add('blurred');
+      taskbar.classList.add('blurred');
+
+      modal.style.display = "block";
+
+      const lines = [
+        "FELICIDADES!",
+        "Han logrado encontrar la contraseña de Soquetín Gutierrez!",
+        "Si averiguaron su historia de orígen, coméntenla con un operador.",
+        "Quizá eso nos ayude un poco a entender como se formó semejante mente criminal",
+        "y podamos rehabilitarlo.",
+        "O aunque sea...",
+        "encontrar hacia donde se fue luego de que se nos escapara."
+      ];
+
+      await typewriterByLine(lines, CHAR_SPEED_MS, LINE_PAUSE_MS);
+      startConfetti();
+    }
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      setMsg("");
+
+      const user = (userEl.value ?? "").trim();
+      const pass = (passEl.value ?? "").trim();
+      const passN = norm(pass);
+
+      // reset UI
+      progress.style.display = "none";
+      bar.style.width = "0%";
+
+      if(user !== "SGUTIERREZ"){
+        setMsg("el usuario no existe", "danger");
+        return;
+      }
+
+      // usuario correcto
+      const obvias = ["lechuza","cochinoca","soquetin"];
+      const encam = ["ana","sakayama","ana sakayama"];
+
+      if(obvias.includes(passN)){
+        setMsg("De verdad piensan que es tan obvio? por que no prueban con 12345?", "danger");
+        return;
+      }
+      if(passN === "12345"){
+        setMsg("-_-", "danger");
+        return;
+      }
+      if(encam.includes(passN)){
+        setMsg("van encaminados... pero falta", "danger");
+        return;
+      }
+
+      if(passN === "kokoro"){
+        // mostrar mensaje + barra y mantenerlos visibles 5s antes de pasar al escritorio
+        setMsg("CONTRASEÑA CORRECTA - INGRESANDO...", "ok");
+        showProgress(LOGIN_PROGRESS_MS);
+
+        // deshabilitar inputs para que no cambien durante la "carga"
+        enterBtn.disabled = true;
+        userEl.disabled = true;
+        passEl.disabled = true;
+
+        await sleep(LOGIN_PROGRESS_MS);
+
+        showDesktop();
+        blurThenModal();
+        return;
+      }
+
+      setMsg("Contraseña incorrecta - Acceso denegado", "danger");
+    });
+
+    // --- Confeti verde constante ---
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W=0,H=0, raf=null;
+    const pieces = [];
+
+    function resize(){
+      W = canvas.width = window.innerWidth * devicePixelRatio;
+      H = canvas.height = window.innerHeight * devicePixelRatio;
+    }
+    window.addEventListener('resize', resize);
+
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    function spawnPiece(){
+      const size = rand(6, 14) * devicePixelRatio;
+      return {
+        x: rand(0, W),
+        y: rand(-H*0.2, -20),
+        w: size,
+        h: size * rand(0.6, 1.2),
+        vy: rand(1.2, 3.2) * devicePixelRatio,
+        vx: rand(-0.5, 0.5) * devicePixelRatio,
+        rot: rand(0, Math.PI*2),
+        vr: rand(-0.08, 0.08),
+        a: rand(0.55, 0.95)
+      };
+    }
+
+    function startConfetti(){
+      canvas.style.display = "block";
+      resize();
+
+      pieces.length = 0;
+      for(let i=0;i<180;i++) pieces.push(spawnPiece());
+
+      function frame(){
+        ctx.clearRect(0,0,W,H);
+
+        for(const p of pieces){
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+
+          if(p.y > H + 40) {
+            Object.assign(p, spawnPiece());
+            p.y = rand(-200, -40);
+          }
+          if(p.x < -40) p.x = W + 40;
+          if(p.x > W + 40) p.x = -40;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.globalAlpha = p.a;
+          ctx.fillStyle = "rgba(43,255,43,0.9)";
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        }
+        raf = requestAnimationFrame(frame);
+      }
+      frame();
+    }
+  </script>
+</body>
+</html>
