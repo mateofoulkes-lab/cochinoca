@@ -399,11 +399,21 @@
       "Fotos de escarpines XXX"
     ];
 
-    function setMsg(text, kind=""){
+    function setMsg(text, kind=""){ 
       msgEl.className = "msg" + (kind ? " " + kind : "");
       msgEl.textContent = text;
     }
     function norm(s){ return (s ?? "").trim().toLowerCase(); }
+    function setFormDisabled(disabled){
+      enterBtn.disabled = disabled;
+      userEl.disabled = disabled;
+      passEl.disabled = disabled;
+    }
+    function resetLoginUI(){
+      progress.style.display = "none";
+      bar.style.width = "0%";
+      setFormDisabled(false);
+    }
 
     function tickClock(){
       const d = new Date();
@@ -513,6 +523,24 @@
       // usuario correcto
       const obvias = ["lechuza","cochinoca","soquetin"];
       const encam = ["ana","sakayama","ana sakayama","alan","corazon","japones","MediaMalvada"];
+      const pantimedia = ["pantimedia", "pantymedia"];
+
+      if(pantimedia.includes(passN)){
+        setFormDisabled(true);
+        setMsg("acceso concedido", "ok");
+        await sleep(2000);
+
+        setMsg("acceso denegado", "danger");
+        await sleep(2000);
+
+        setMsg("Wow... debo felicitarlos por el trabajo inútil que han hecho. ¿Iniciales y desplazamiento alfabético? ¿Quién creen que soy? ¿Un amateur? La respuesta es mucho mas sencilla, solo escuchen lo que digo... aunque... en realidad... ¿Qué usarían si no pudieran oírme?");
+        await sleep(6000);
+
+        resetLoginUI();
+        passEl.value = "";
+        setMsg("");
+        return;
+      }
 
       if(obvias.includes(passN)){
         setMsg("De verdad piensan que es tan obvio? por que no prueban con 12345?", "danger");
@@ -533,9 +561,7 @@
         showProgress(LOGIN_PROGRESS_MS);
 
         // deshabilitar inputs para que no cambien durante la "carga"
-        enterBtn.disabled = true;
-        userEl.disabled = true;
-        passEl.disabled = true;
+        setFormDisabled(true);
 
         await sleep(LOGIN_PROGRESS_MS);
 
