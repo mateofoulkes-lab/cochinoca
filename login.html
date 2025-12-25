@@ -307,6 +307,49 @@
       line-height:1.35;
     }
     .note strong{ color:rgba(182,255,182,.75); }
+
+    /* Popup login */
+    .popup{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.58);
+      backdrop-filter: blur(2px);
+      z-index:20;
+    }
+    .popup.visible{ display:flex; }
+    .popup .box{
+      width:min(520px, 92vw);
+      border-radius:14px;
+      border:1px solid rgba(43,255,43,.22);
+      background: linear-gradient(180deg, rgba(7,16,7,.92), rgba(4,8,4,.82));
+      box-shadow:0 22px 70px rgba(0,0,0,.72), 0 0 48px rgba(43,255,43,.12);
+      padding:18px 18px 16px;
+    }
+    .popup h3{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .popup-message{
+      min-height:64px;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid rgba(43,255,43,.18);
+      background:rgba(0,0,0,.25);
+      color:rgba(182,255,182,.88);
+      line-height:1.5;
+      box-shadow:0 0 0 1px rgba(0,0,0,.35) inset;
+    }
+    .popup-message.ok{ color:var(--accent); border-color:rgba(43,255,43,.35); }
+    .popup-message.danger{ color:var(--danger); border-color:rgba(255,93,93,.45); }
+    .popup .popup-close{
+      margin-top:12px;
+    }
   </style>
 </head>
 <body class="scanlines">
@@ -338,6 +381,14 @@
           <strong>Importante:</strong> Si no entiende como funciona esta web, por favor dirijase al programa para jóvenes estúpidos en la oficina de al lado.
         </div>
       </form>
+    </div>
+  </div>
+
+  <div class="popup" id="loginPopup" aria-hidden="true">
+    <div class="box">
+      <h3>Mensaje del sistema</h3>
+      <div class="popup-message" id="popupMessage"></div>
+      <button class="btn popup-close" id="popupClose">Cerrar</button>
     </div>
   </div>
 
@@ -384,6 +435,9 @@
     const typed = document.getElementById('typed');
     const clockEl = document.getElementById('clock');
     const taskbar = document.getElementById('taskbar');
+    const loginPopup = document.getElementById('loginPopup');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupClose = document.getElementById('popupClose');
 
     const incriminantes = [
       "Delitos",
@@ -408,6 +462,16 @@
       enterBtn.disabled = disabled;
       userEl.disabled = disabled;
       passEl.disabled = disabled;
+    }
+    function openLoginPopup(){
+      loginPopup.classList.add('visible');
+      loginPopup.setAttribute('aria-hidden', 'false');
+    }
+    function closeLoginPopup(){
+      loginPopup.classList.remove('visible');
+      loginPopup.setAttribute('aria-hidden', 'true');
+      popupMessage.textContent = "";
+      popupMessage.className = 'popup-message';
     }
     function resetLoginUI(){
       progress.style.display = "none";
@@ -450,6 +514,20 @@
     }
 
     const sleep = (ms)=> new Promise(r=>setTimeout(r, ms));
+
+    async function showLoginPopupSequence(steps){
+      openLoginPopup();
+      popupClose.disabled = true;
+
+      for(const step of steps){
+        popupMessage.className = 'popup-message' + (step.kind ? ` ${step.kind}` : '');
+        popupMessage.textContent = step.text;
+        if(step.delay) await sleep(step.delay);
+      }
+
+      popupClose.disabled = false;
+      popupClose.focus();
+    }
 
     async function typewriterByLine(lines, charSpeed=20, linePause=2000){
       typed.textContent = "";
@@ -527,18 +605,12 @@
 
       if(pantimedia.includes(passN)){
         setFormDisabled(true);
-        setMsg("acceso concedido", "ok");
-        await sleep(2000);
-
-        setMsg("acceso denegado", "danger");
-        await sleep(2000);
-
-        setMsg("Wow... debo felicitarlos por el trabajo inútil que han hecho. ¿Iniciales y desplazamiento alfabético? ¿Quién creen que soy? ¿Un amateur? La respuesta es mucho mas sencilla, solo escuchen lo que digo... aunque... en realidad... ¿Qué usarían si no pudieran oírme?");
-        await sleep(6000);
-
-        resetLoginUI();
-        passEl.value = "";
         setMsg("");
+        await showLoginPopupSequence([
+          { text:"acceso concedido", kind:"ok", delay:2000 },
+          { text:"acceso denegado", kind:"danger", delay:2000 },
+          { text:"Wow... debo felicitarlos por el trabajo inútil que han hecho. ¿Iniciales y desplazamiento alfabético? ¿Quién creen que soy? ¿Un amateur? La respuesta es mucho mas sencilla, solo escuchen lo que digo... aunque... en realidad... ¿Qué usarían si no pudieran oírme?", delay:6000 }
+        ]);
         return;
       }
 
@@ -571,6 +643,15 @@
       }
 
       setMsg("Contraseña incorrecta - Acceso denegado", "danger");
+    });
+
+    popupClose.addEventListener('click', ()=>{
+      closeLoginPopup();
+      resetLoginUI();
+      passEl.value = "";
+      setMsg("");
+      setFormDisabled(false);
+      passEl.focus();
     });
 
     // --- Confeti verde constante ---
