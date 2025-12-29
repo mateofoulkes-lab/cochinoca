@@ -602,10 +602,12 @@
       const passN = norm(pass);
 
       const margenes = desordenarMargenes(["bGVjaHV6YQ==","Y29jaGlub2Nh","c29xdWV0aW4="]);
-      const dobladillos = desordenarMargenes(["YW5h","c2FrYXlhbWE=","YW5hIHNha2F5YW1h","YWxhbg==","Y29yYXpvbg==","amFwb25lcw==","TWVkaWFNYWx2YWRh"]);
-      const puntadas = desordenarMargenes(["cGFudGltZWRpYQ==", "cGFudHlNRURJQQ=="]);
-      const pliegue = mostrarMargen("a29rb3Jv").toLowerCase();
-      const bordeVisible = "CHUAVECHITO";
+      const bordecitos = desordenarMargenes(["YW5h","c2FrYXlhbWE=","YW5hIHNha2F5YW1h","YWxhbg==","Y29yYXpvbg==","amFwb25lcw==","TWVkaWFNYWx2YWRh"]);
+      const tablas = desordenarMargenes(["cGFudGltZWRpYQ==", "cGFudHlNRURJQQ=="]);
+      const degradados = mostrarMargen("a29rb3Jv").toLowerCase();
+
+      // CONTRASEÑA CORRECTA FINAL 
+      const password = "CHUAVECHITO";
 
       // reset UI
       progress.style.display = "none";
@@ -617,7 +619,7 @@
       }
 
       // usuario correcto
-      if(puntadas.includes(passN)){
+      if(tablas.includes(passN)){
         setFormDisabled(true);
         setMsg("");
         await showLoginPopupSequence([
@@ -628,7 +630,7 @@
         return;
       }
 
-      if(passN === bordeVisible.toLowerCase()){
+      if(passN === password.toLowerCase()){
         setFormDisabled(true);
         setMsg("");
         await showLoginPopupSequence([
@@ -647,12 +649,12 @@
         setMsg("-_-", "danger");
         return;
       }
-      if(dobladillos.includes(passN)){
+      if(bordecitos.includes(passN)){
         setMsg("van encaminados... pero falta", "danger");
         return;
       }
 
-      if(passN === pliegue){
+      if(passN === degradados){
         // mostrar mensaje + barra y mantenerlos visibles 5s antes de pasar al escritorio
         setMsg("CONTRASEÑA CORRECTA - INGRESANDO...", "ok");
         showProgress(LOGIN_PROGRESS_MS);
